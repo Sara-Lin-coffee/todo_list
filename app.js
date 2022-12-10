@@ -28,7 +28,7 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
-//呼叫"根目錄"時
+//呼叫"根目錄"
 app.get('/', (req, res) => {
   Todo.find()
   .lean()
@@ -48,6 +48,15 @@ app.post('/todos', (req, res) =>{
   return Todo.create({ name })
   .then( ()=> res.redirect('/'))
   .catch(error => console.error('error'))
+})
+
+//呼叫detail資訊
+app.get('/todos/:id', (req, res)=>{
+  const id = req.params.id
+  return Todo.findById(id)
+  .lean()
+  .then( (todo)=> res.render('detail', {todo}))
+  .catch( error => console.error('error'))
 })
 
 //web app監聽器
