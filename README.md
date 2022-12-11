@@ -1,0 +1,10 @@
+# Todo List
+This is a back end structure practice.
+The purpose is to interacte with database and create moutiple routes to acheive CRUD function. 
+
+## Development enviroment
+
+- Web frame: Express
+- Template engine: express-handlebars
+- Database: MongoDB (NoSQL)
+- ODM: mongoose
