@@ -80,6 +80,17 @@ app.post('/todos/:id/edit', (req, res) => {
     .catch( error => console.log('error'))
 })
 
+//delete
+app.post('/todos/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .then(todo => {
+      return todo.remove()
+    })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log('error'))
+})
+
 //web app監聽器
 app.listen(`${ port }`, () => {
   console.log('=====================')
