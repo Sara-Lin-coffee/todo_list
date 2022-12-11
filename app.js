@@ -55,8 +55,29 @@ app.get('/todos/:id', (req, res)=>{
   const id = req.params.id
   return Todo.findById(id)
   .lean()
-  .then( (todo)=> res.render('detail', {todo}))
+  .then( todo=> res.render('detail', {todo}))
   .catch( error => console.error('error'))
+})
+
+//呼叫edit頁面
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+  .lean()  
+  .then(todo => res.render('edit', { todo }))
+  .catch(error => console.error('error'))
+})
+
+//edit_修改資料庫資料
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return Todo.findById(id)
+    .then( todo => {
+      todo.name = name
+      return todo.save()})
+    .then(() => res.redirect(`/todos/${id}`))
+    .catch( error => console.log('error'))
 })
 
 //web app監聽器
