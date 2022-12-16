@@ -32,9 +32,9 @@ db.once('open', () => {
 app.get('/', (req, res) => {
   Todo.find()
   .lean()
-  .then(todos => res.render('index', {todos}))
+  .then(todos => 
+    res.render('index', {todos}))
   .catch( error => console.error('error'))
-
 })
 
 //呼叫 "/todos/new" 時
@@ -63,18 +63,19 @@ app.get('/todos/:id', (req, res)=>{
 app.get('/todos/:id/edit', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
-  .lean()  
-  .then(todo => res.render('edit', { todo }))
+  .lean()
+  .then( (todo)=> res.render('edit', {todo}))
   .catch(error => console.error('error'))
 })
 
 //edit_修改資料庫資料
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const {name, isDone} = req.body
   return Todo.findById(id)
     .then( todo => {
       todo.name = name
+      todo.isDone = isDone ==='on'
       return todo.save()})
     .then(() => res.redirect(`/todos/${id}`))
     .catch( error => console.log('error'))
