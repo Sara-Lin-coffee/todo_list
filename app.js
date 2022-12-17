@@ -1,5 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const methodOverride = require('method-override')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const Todo = require('./models/todo')
@@ -10,6 +11,7 @@ const port = 3000
 app.engine('hbs',exphbs.engine({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(methodOverride('_method'))
 
 //僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== 'production') {
@@ -70,7 +72,7 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 //edit_修改資料庫資料
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const {name, isDone} = req.body
   return Todo.findById(id)
@@ -83,7 +85,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 //delete
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then(todo => {
